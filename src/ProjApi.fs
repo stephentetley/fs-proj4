@@ -1,6 +1,6 @@
 ﻿// Acknowledgement: Largeley derived from Eric G. Miller's C# code.
 
-module Proj4
+module ProjApi
 
 open System
 open System.Runtime.InteropServices
@@ -35,9 +35,20 @@ extern ProjUV pj_fwd(ProjUV LP, IntPtr projPJ);
     CharSet=CharSet.Ansi, CallingConvention=CallingConvention.Cdecl)>]
 extern ProjUV pj_inv(ProjUV XY, IntPtr projPJ);
 
+
+[<System.Runtime.InteropServices.DllImport(@"C:\Program Files\QGIS 3.0\bin\proj.dll",EntryPoint="pj_transform", 
+    CharSet=CharSet.Ansi, CallingConvention=CallingConvention.Cdecl)>]
+extern int pj_transform(IntPtr src, IntPtr dst, int point_count, int point_offset, 
+    [<In; Out>] double[] x, [<In; Out>] double[] y, [<In; Out>] double[] z);
+
+
 [<System.Runtime.InteropServices.DllImport(@"C:\Program Files\QGIS 3.0\bin\proj.dll",EntryPoint="pj_init_plus", 
     CharSet=CharSet.Ansi, CallingConvention=CallingConvention.Cdecl)>]
 extern IntPtr pj_init_plus([<MarshalAs(UnmanagedType.LPStr)>] string pjstr);
+
+[<System.Runtime.InteropServices.DllImport(@"C:\Program Files\QGIS 3.0\bin\proj.dll",EntryPoint="pj_free", 
+    CharSet=CharSet.Ansi, CallingConvention=CallingConvention.Cdecl)>]
+extern void pj_free(IntPtr projPJ);
 
 
 [<System.Runtime.InteropServices.DllImport(@"C:\Program Files\QGIS 3.0\bin\proj.dll",EntryPoint="pj_run_selftests")>]
