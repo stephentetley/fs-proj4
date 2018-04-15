@@ -6,6 +6,11 @@ open System
 open System.Runtime.InteropServices
 open Microsoft.FSharp.NativeInterop
 
+
+let RAD_TO_DEG : double = 57.295779513082321
+let DEG_TO_RAD : double = 0.017453292519943296
+
+
 [<Struct; StructLayout(LayoutKind.Sequential)>]
 type ProjUV = 
     new (u, v) = { U2 = u; V2 = v }
@@ -42,9 +47,17 @@ extern int pj_transform(IntPtr src, IntPtr dst, int point_count, int point_offse
     [<In; Out>] double[] x, [<In; Out>] double[] y, [<In; Out>] double[] z);
 
 
+
+[<System.Runtime.InteropServices.DllImport(@"C:\Program Files\QGIS 3.0\bin\proj.dll",EntryPoint="pj_init", 
+    CharSet=CharSet.Ansi, CallingConvention=CallingConvention.Cdecl)>]
+extern IntPtr pj_init(int argc, 
+    [<MarshalAs(UnmanagedType.LPArray, ArraySubType=UnmanagedType.LPStr, SizeParamIndex=1s)>] string[] argv);
+
 [<System.Runtime.InteropServices.DllImport(@"C:\Program Files\QGIS 3.0\bin\proj.dll",EntryPoint="pj_init_plus", 
     CharSet=CharSet.Ansi, CallingConvention=CallingConvention.Cdecl)>]
 extern IntPtr pj_init_plus([<MarshalAs(UnmanagedType.LPStr)>] string pjstr);
+
+
 
 [<System.Runtime.InteropServices.DllImport(@"C:\Program Files\QGIS 3.0\bin\proj.dll",EntryPoint="pj_free", 
     CharSet=CharSet.Ansi, CallingConvention=CallingConvention.Cdecl)>]
