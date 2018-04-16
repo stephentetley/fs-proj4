@@ -3,6 +3,7 @@
 
 open System
 open System.Runtime.InteropServices
+open Microsoft.FSharp.NativeInterop
 
 #load @"ProjApi.fs"
 open ProjApi
@@ -65,11 +66,13 @@ let Test_pj_inv () : bool =
             printfn " ({%f},{%f}) " (ans.U2 * RAD_TO_DEG) (ans.V2 * RAD_TO_DEG)
             true
 
+// Note err = -38 is "failed to load datum shift file",  	        
 let Test_pj_transform () : bool = 
     let mutable x : double[] = [| -119.0; -120.0; -121.0 |] |> Array.map (fun v -> v * DEG_TO_RAD)
     let mutable y : double[] = [| 38.0; 39.0; 40.0 |]       |> Array.map (fun v -> v * DEG_TO_RAD)
     let src : IntPtr = pj_init_plus("+proj=latlong +datum=NAD27 +nadgrids=conus +nodefs")
-    let dst : IntPtr = pj_init_plus(@"+proj=aea +lat_0=0 +lon_0=-120 +lat_1=34 +lat_2=40.5 +y_0=-4000000 +datum=NAD83")
+    let dst : IntPtr = pj_init_plus(@"+proj=aea +lat_0=0 +lon_0=-120 "
+                                      + @"+lat_1=34 +lat_2=40.5 +y_0=-4000000 +nodefs") // ... +datum=NAD83 +nodefs"
     // src -> src works but not src->dst...
     let errno = pj_transform(src, dst, x.Length, 1, x, y, null)
     pj_free(src)

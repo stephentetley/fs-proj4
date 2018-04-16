@@ -55,6 +55,7 @@
     <Compile Include="AssemblyInfo.fs" />
     <Compile Include="ProjApi.fs" />
     <None Include="Test01.fsx" />
+    <None Include="TestProjApi.fsx" />
     <Content Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

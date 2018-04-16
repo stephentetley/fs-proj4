@@ -30,50 +30,51 @@ type ProjXYZ = ProjUVZ
 type ProjLPZ = ProjUVZ
 
 
+[<Literal>]
+let ProjDLL = @"C:\Program Files\QGIS 3.0\bin\proj.dll"
+
 // projXY pj_fwd(projLP, projPJ);
 // projLP pj_inv(projXY, projPJ);
-[<System.Runtime.InteropServices.DllImport(@"C:\Program Files\QGIS 3.0\bin\proj.dll",EntryPoint="pj_fwd", 
-    CharSet=CharSet.Ansi, CallingConvention=CallingConvention.Cdecl)>]
+[<DllImport(ProjDLL, EntryPoint="pj_fwd", CharSet=CharSet.Ansi, CallingConvention=CallingConvention.Cdecl)>]
 extern ProjUV pj_fwd(ProjUV LP, IntPtr projPJ);
 
-[<System.Runtime.InteropServices.DllImport(@"C:\Program Files\QGIS 3.0\bin\proj.dll",EntryPoint="pj_inv", 
-    CharSet=CharSet.Ansi, CallingConvention=CallingConvention.Cdecl)>]
+[<DllImport(ProjDLL, EntryPoint="pj_inv", CharSet=CharSet.Ansi, CallingConvention=CallingConvention.Cdecl)>]
 extern ProjUV pj_inv(ProjUV XY, IntPtr projPJ);
 
 
-[<System.Runtime.InteropServices.DllImport(@"C:\Program Files\QGIS 3.0\bin\proj.dll",EntryPoint="pj_transform", 
-    CharSet=CharSet.Ansi, CallingConvention=CallingConvention.Cdecl)>]
-extern int pj_transform(IntPtr src, IntPtr dst, int point_count, int point_offset, 
-    [<InAttribute; OutAttribute>] double[] x, [<InAttribute; OutAttribute>] double[] y, [<InAttribute; OutAttribute>] double[] z);
+[<DllImport(ProjDLL, EntryPoint="pj_transform", CharSet=CharSet.Ansi, CallingConvention=CallingConvention.Cdecl)>]
+extern int pj_transform(IntPtr src, IntPtr dst, int point_count, int point_offset,
+     [<In;Out>] double[] x, 
+     [<In;Out>] double[] y, 
+     [<In;Out>] double[] z);
+
+//[<DllImport(ProjDLL, EntryPoint="pj_transform", CharSet=CharSet.Ansi, CallingConvention=CallingConvention.Cdecl)>]
+//extern int pj_transform(IntPtr src, IntPtr dst, int point_count, int point_offset,
+//     IntPtr x, 
+//     IntPtr y, 
+//     IntPtr z);
 
 
 
-[<System.Runtime.InteropServices.DllImport(@"C:\Program Files\QGIS 3.0\bin\proj.dll",EntryPoint="pj_init", 
-    CharSet=CharSet.Ansi, CallingConvention=CallingConvention.Cdecl)>]
+[<DllImport(ProjDLL, EntryPoint="pj_init", CharSet=CharSet.Ansi, CallingConvention=CallingConvention.Cdecl)>]
 extern IntPtr pj_init(int argc, 
     [<MarshalAs(UnmanagedType.LPArray, ArraySubType=UnmanagedType.LPStr, SizeParamIndex=1s)>] string[] argv);
 
-[<System.Runtime.InteropServices.DllImport(@"C:\Program Files\QGIS 3.0\bin\proj.dll",EntryPoint="pj_init_plus", 
-    CharSet=CharSet.Ansi, CallingConvention=CallingConvention.Cdecl)>]
+[<DllImport(ProjDLL, EntryPoint="pj_init_plus", CharSet=CharSet.Ansi, CallingConvention=CallingConvention.Cdecl)>]
 extern IntPtr pj_init_plus([<MarshalAs(UnmanagedType.LPStr)>] string pjstr);
 
 
 
-[<System.Runtime.InteropServices.DllImport(@"C:\Program Files\QGIS 3.0\bin\proj.dll",EntryPoint="pj_free", 
-    CharSet=CharSet.Ansi, CallingConvention=CallingConvention.Cdecl)>]
+[<DllImport(ProjDLL, EntryPoint="pj_free", CharSet=CharSet.Ansi, CallingConvention=CallingConvention.Cdecl)>]
 extern void pj_free(IntPtr projPJ);
 
 
-[<System.Runtime.InteropServices.DllImport(@"C:\Program Files\QGIS 3.0\bin\proj.dll",EntryPoint="pj_get_release", 
-    CharSet=CharSet.Ansi, CallingConvention=CallingConvention.Cdecl)>]
+[<DllImport(ProjDLL, EntryPoint="pj_get_release", CharSet=CharSet.Ansi, CallingConvention=CallingConvention.Cdecl)>]
 extern IntPtr pj_get_release();
 
 
 
-[<System.Runtime.InteropServices.DllImport(@"C:\Program Files\QGIS 3.0\bin\proj.dll",EntryPoint="pj_run_selftests")>]
+[<DllImport(ProjDLL, EntryPoint="pj_run_selftests", CharSet=CharSet.Ansi, CallingConvention=CallingConvention.Cdecl)>]
 extern int pj_run_selftests(int verbosity);
 
 
-//[<System.Runtime.InteropServices.DllImport(@"C:\Program Files\QGIS 3.0\bin\proj.dll",EntryPoint="pj_release")>]
-//extern string pj_release();
-    
