@@ -1,0 +1,24 @@
+cs2cs +init=epsg:4326 +to +init=epsg:27700
+
+52.65757031 1.717921583
+
+
+// DMS
+echo 1d43'4.536"E    52d39'27.239"N | cs2cs +init=epsg:4326 +to +init=epsg:27700
+
+// decimal degrees
+echo 1.717921583    52.65757031 | cs2cs +init=epsg:4326 +to +init=epsg:27700
+
+// Reverse
+echo 651539 313138 | cs2cs +init=epsg:27700 +to +init=epsg:4326
+
+
+
++proj=aea +lat_0=0 +lon_0=-120 +lat_1=34 +lat_2=40.5 +y_0=-4000000
+
+    let mutable x : double[] = [| -119.0; -120.0; -121.0 |] |> Array.map (fun v -> v * DEG_TO_RAD)
+    let mutable y : double[] = [| 38.0; 39.0; 40.0 |]       |> Array.map (fun v -> v * DEG_TO_RAD)
+	
+
+int pj_transform( projPJ src, projPJ dst, long point_count, int point_offset,
+                  double *x, double *y, double *z );
