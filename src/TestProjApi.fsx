@@ -66,13 +66,16 @@ let Test_pj_inv () : bool =
             printfn " ({%f},{%f}) " (ans.U2 * RAD_TO_DEG) (ans.V2 * RAD_TO_DEG)
             true
 
-// Note err = -38 is "failed to load datum shift file",  	        
+// Note err = -38 is "failed to load datum shift file",  
+// See example here: 
+// https://github.com/OSGeo/proj.4/wiki/ProjAPI
+// Note - sending invalid projection strings can case fatal memory access violations.
+
 let Test_pj_transform () : bool = 
-    let mutable x : double[] = [| -119.0; -120.0; -121.0 |] |> Array.map (fun v -> v * DEG_TO_RAD)
-    let mutable y : double[] = [| 38.0; 39.0; 40.0 |]       |> Array.map (fun v -> v * DEG_TO_RAD)
-    let src : IntPtr = pj_init_plus("+proj=latlong +datum=NAD27 +nadgrids=conus +nodefs")
-    let dst : IntPtr = pj_init_plus(@"+proj=aea +lat_0=0 +lon_0=-120 "
-                                      + @"+lat_1=34 +lat_2=40.5 +y_0=-4000000 +nodefs") // ... +datum=NAD83 +nodefs"
+    let mutable x : double[] = [| -16.0 |]      |> Array.map (fun v -> v * DEG_TO_RAD)
+    let mutable y : double[] = [| 20.25 |]      |> Array.map (fun v -> v * DEG_TO_RAD)
+    let src : IntPtr = pj_init_plus(@"+proj=latlong +ellps=clrk66")
+    let dst : IntPtr = pj_init_plus(@"+proj=merc +ellps=clrk66 +lat_ts=33") 
     // src -> src works but not src->dst...
     let errno = pj_transform(src, dst, x.Length, 1, x, y, null)
     pj_free(src)
@@ -81,7 +84,7 @@ let Test_pj_transform () : bool =
         printfn "Error: pj_transform {%i}" errno
         false
     else
-        printfn "%A\n%A" (x |> Array.map (fun v -> v * RAD_TO_DEG)) (y |> Array.map (fun v -> v * RAD_TO_DEG)) 
+        printfn "%A\n%A" x y // (x |> Array.map (fun v -> v * RAD_TO_DEG)) (y |> Array.map (fun v -> v * RAD_TO_DEG)) 
         true
 
 
