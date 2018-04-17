@@ -1,10 +1,15 @@
-﻿// Acknowledgement: Largeley derived from Eric G. Miller's C# code.
+﻿// Acknowledgement: Largely derived from Eric G. Miller's C# code.
 
-module ProjApi
+module ProjApiV4
 
 open System
 open System.Runtime.InteropServices
 open Microsoft.FSharp.NativeInterop
+
+
+// Target 4.9.3
+[<Literal>]
+let ProjDLL = @"C:\Program Files\QGIS 3.0\bin\proj.dll"
 
 
 let RAD_TO_DEG : double = 57.295779513082321
@@ -30,8 +35,6 @@ type ProjXYZ = ProjUVZ
 type ProjLPZ = ProjUVZ
 
 
-[<Literal>]
-let ProjDLL = @"C:\Program Files\QGIS 3.0\bin\proj.dll"
 
 // projXY pj_fwd(projLP, projPJ);
 // projLP pj_inv(projXY, projPJ);

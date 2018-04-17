@@ -5,8 +5,8 @@ open System
 open System.Runtime.InteropServices
 open Microsoft.FSharp.NativeInterop
 
-#load @"ProjApi.fs"
-open ProjApi
+#load @"ProjApiV4.fs"
+open ProjApiV4
 
 
 let Test_pj_init () : bool =
