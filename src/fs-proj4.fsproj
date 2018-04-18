@@ -53,9 +53,10 @@
   <Import Project="$(FSharpTargetsPath)" />
   <ItemGroup>
     <Compile Include="AssemblyInfo.fs" />
-    <Compile Include="ProjApi.fs" />
-    <None Include="Test01.fsx" />
-    <None Include="TestProjApi.fsx" />
+    <Compile Include="ProjApiV4.fs" />
+    <Compile Include="ProjApiV5.fs" />
+    <None Include="TestV5.fsx" />
+    <None Include="TestV4.fsx" />
     <Content Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
