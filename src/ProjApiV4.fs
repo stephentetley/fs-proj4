@@ -58,7 +58,7 @@ extern int pj_transform(IntPtr src, IntPtr dst, int point_count, int point_offse
 //     IntPtr z);
 
 
-
+// projPJ pj_init(int, char **);
 [<DllImport(ProjDLL, EntryPoint="pj_init", CharSet=CharSet.Ansi, CallingConvention=CallingConvention.Cdecl)>]
 extern IntPtr pj_init(int argc, 
     [<MarshalAs(UnmanagedType.LPArray, ArraySubType=UnmanagedType.LPStr, SizeParamIndex=1s)>] string[] argv);
