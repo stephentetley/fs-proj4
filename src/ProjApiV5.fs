@@ -9,7 +9,27 @@ open System.Text
 
 // Target 5.0.1
 [<Literal>]
-let ProjDLL = @"E:\coding\libs\proj-5.0.1_bin\bin\proj.dll"
+let ProjDLL = __SOURCE_DIRECTORY__ +  @"\..\lib\lib.5.0.1_x64\proj.dll"
+
+
+[<Struct; StructLayout(LayoutKind.Sequential)>]
+type P5Factors = 
+    val MeridionalScale : double           /// h
+    val ParallelScale : double             /// k
+    val ArealScale : double                /// s
+
+    val AngularDistortion : double         /// omega
+    val MeridianParallelAngle : double    /// theta-prime
+    val MeridianConvergence : double       /// alpha
+
+    val TissotSemimajor : double           /// a
+    val TissotSemiminor : double           /// b
+
+    val DxDlam : double 
+    val DxDphi : double
+    val DyDlam : double
+    val DyDphi : double
+
 
 
 // PJ is an opaque struct
@@ -68,6 +88,18 @@ type PjInfo =
     val PathsPtr : IntPtr
     val mutable PathCount : int 
 
+[<Struct; StructLayout(LayoutKind.Sequential)>]
+type PjProjInfo = 
+    // no user defined constructor...
+    val Id : IntPtr
+    val Description : IntPtr
+    val Definition : IntPtr
+    val mutable HasInverse : int
+    val mutable Accuracy : double
+
+
+
+
 // PJ_CONTEXT *proj_context_create (void);
 [<DllImport(ProjDLL, EntryPoint="proj_context_create", CharSet=CharSet.Ansi, CallingConvention=CallingConvention.Cdecl)>]
 extern PjContextPtr proj_context_create();
@@ -88,15 +120,48 @@ extern PjPtr proj_create(PjContextPtr ctx, string definition);
 [<DllImport(ProjDLL, EntryPoint="proj_destroy", CharSet=CharSet.Ansi, CallingConvention=CallingConvention.Cdecl)>]
 extern PjPtr proj_destroy(PjPtr p);
 
+type PjDirection = 
+    | PjFwd = 1
+    | PjIdent = 0
+    | PjInv = -1
+
+// int proj_angular_input (PJ *P, enum PJ_DIRECTION dir);
+[<DllImport(ProjDLL, EntryPoint="proj_angular_input", CharSet=CharSet.Ansi, CallingConvention=CallingConvention.Cdecl)>]
+extern int proj_angular_input(PjPtr p, PjDirection dir);
+
+// int proj_angular_output (PJ *P, enum PJ_DIRECTION dir);
+[<DllImport(ProjDLL, EntryPoint="proj_angular_output", CharSet=CharSet.Ansi, CallingConvention=CallingConvention.Cdecl)>]
+extern int proj_angular_output(PjPtr p, PjDirection dir);
+
+
+/// Set or read error level
+
+// int  proj_context_errno (PJ_CONTEXT *ctx);
+[<DllImport(ProjDLL, EntryPoint="proj_context_errno", CharSet=CharSet.Ansi, CallingConvention=CallingConvention.Cdecl)>]
+extern int proj_context_errno(PjContextPtr ctx);
+
+// int  proj_errno (const PJ *P);
+[<DllImport(ProjDLL, EntryPoint="proj_errno", CharSet=CharSet.Ansi, CallingConvention=CallingConvention.Cdecl)>]
+extern int proj_errno(PjPtr ctx);
+
+// int  proj_errno_set (const PJ *P, int err);
+[<DllImport(ProjDLL, EntryPoint="proj_errno_set", CharSet=CharSet.Ansi, CallingConvention=CallingConvention.Cdecl)>]
+extern int proj_errno_set(PjPtr ctx, int err);
+
+
+// int  proj_errno_reset (const PJ *P);
+[<DllImport(ProjDLL, EntryPoint="proj_errno_reset", CharSet=CharSet.Ansi, CallingConvention=CallingConvention.Cdecl)>]
+extern int proj_errno_reset(PjPtr ctx);
+
+// int  proj_errno_restore (const PJ *P, int err);
+[<DllImport(ProjDLL, EntryPoint="proj_errno_restore", CharSet=CharSet.Ansi, CallingConvention=CallingConvention.Cdecl)>]
+extern int proj_errno_restore(PjPtr ctx, int err);
 
 // PJ_INFO proj_info(void);
 [<DllImport(ProjDLL, EntryPoint="proj_info", CharSet=CharSet.Ansi, CallingConvention=CallingConvention.Cdecl)>]
 extern PjInfo proj_info();
 
-type PjDirection = 
-    | PjFwd = 1
-    | PjIdent = 0
-    | PjInv = -1
+
 
 
 // double proj_torad (double angle_in_degrees);

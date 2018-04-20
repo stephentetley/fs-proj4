@@ -9,7 +9,7 @@ open Microsoft.FSharp.NativeInterop
 
 // Target 4.9.3
 [<Literal>]
-let ProjDLL = @"C:\Program Files\QGIS 3.0\bin\proj.dll"
+let ProjDLL = __SOURCE_DIRECTORY__ +  @"\..\lib\lib.4.9.3_x64\proj.dll"
 
 
 let RAD_TO_DEG : double = 57.295779513082321
