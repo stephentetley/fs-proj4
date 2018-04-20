@@ -98,3 +98,13 @@ let Test_pj_get_release () : unit =
     | ex ->
         printfn "Error: Test_pj_get_release {%A}"  ex
 
+let Test_pj_pr_list() : bool = 
+    try 
+        let projPJ : IntPtr = pj_init_plus(@"+proj=merc +ellps=clrk66 +lat_ts=33") 
+        pj_pr_list(projPJ)
+        pj_free(projPJ)
+        true
+    with
+    | ex ->
+        printfn "Error: Test_pj_pr_list {%A}"  ex
+        false
