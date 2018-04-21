@@ -35,6 +35,50 @@ type P5Factors =
 // PJ is an opaque struct
 type PjPtr = IntPtr
 type PjContextPtr = IntPtr
+type PjAreaPtr = IntPtr
+
+/// Geodetic, mostly spatiotemporal coordinate types
+
+// typedef struct { double   x,   y,  z, t; }  PJ_XYZT;
+[<Struct; StructLayout(LayoutKind.Sequential)>]
+type PjXYZT = 
+    val X4 : double
+    val Y4 : double
+    val Z4 : double
+    val T4 : double
+
+// typedef struct { double   u,   v,  w, t; }  PJ_UVWT;
+[<Struct; StructLayout(LayoutKind.Sequential)>]
+type PjUVWT = 
+    val U4 : double
+    val V4 : double
+    val W4 : double
+    val T4 : double
+
+// typedef struct { double lam, phi,  z, t; }  PJ_LPZT;
+[<Struct; StructLayout(LayoutKind.Sequential)>]
+type PjULPZT = 
+    val Lam4 : double
+    val Phi4 : double
+    val Z4 : double
+    val T4 : double
+
+// typedef struct { double o, p, k; }          PJ_OPK;  /* Rotations: omega, phi, kappa */
+[<Struct; StructLayout(LayoutKind.Sequential)>]
+type PjOPK = 
+    val O3 : double
+    val P3 : double
+    val K3 : double
+
+// typedef struct { double e, n, u; }          PJ_ENU;  /* East, North, Up */
+[<Struct; StructLayout(LayoutKind.Sequential)>]
+type PjENU = 
+    val E3 : double
+    val N3 : double
+    val U3 : double
+
+//typedef struct { double s, a1, a2; }        PJ_GEOD; /* Geodesic length, fwd azi, rev azi */
+
 
 [<Struct; StructLayout(LayoutKind.Sequential)>]
 type PjUV = 
@@ -49,7 +93,7 @@ type PjXY =
     val Y2 : double
 
 [<Struct; StructLayout(LayoutKind.Sequential)>]
-type PjXLP = 
+type PjLP = 
     new (lam, phi) = { Lam2 = lam; Phi2 = phi }
     val Lam2 : double
     val Phi2 : double
@@ -97,9 +141,41 @@ type PjProjInfo =
     val mutable HasInverse : int
     val mutable Accuracy : double
 
+[<Struct; StructLayout(LayoutKind.Sequential)>]
+type PjGridInfo = 
+    [<MarshalAs(UnmanagedType.ByValTStr, SizeConst = 32)>]
+    val Gridname : string
+    [<MarshalAs(UnmanagedType.ByValTStr, SizeConst = 260)>]
+    val Filename : string
+    [<MarshalAs(UnmanagedType.ByValTStr, SizeConst = 8)>]
+    val Format : string
+    val LowerLeft : PjLP
+    val UpperRight : PjLP
+    val NLon : int
+    val NLat : int
+    val CsLon : double
+    val CsLat : double
 
+//struct PJ_INIT_INFO {
+//    char        name[32];           /* name of init file                        */
+//    char        filename[260];      /* full path to the init file.              */
+//    char        version[32];        /* version of the init file                 */
+//    char        origin[32];         /* origin of the file, e.g. EPSG            */
+//    char        lastupdate[16];     /* Date of last update in YYYY-MM-DD format */
+//};
 
-
+[<Struct; StructLayout(LayoutKind.Sequential)>]
+type PjInitInfo = 
+    [<MarshalAs(UnmanagedType.ByValTStr, SizeConst = 32)>]
+    val Name : string
+    [<MarshalAs(UnmanagedType.ByValTStr, SizeConst = 260)>]
+    val Filename : string
+    [<MarshalAs(UnmanagedType.ByValTStr, SizeConst = 32)>]
+    val Version : string
+    [<MarshalAs(UnmanagedType.ByValTStr, SizeConst = 32)>]
+    val Origin : string
+    [<MarshalAs(UnmanagedType.ByValTStr, SizeConst = 16)>]
+    val LastUpdate : string
 // PJ_CONTEXT *proj_context_create (void);
 [<DllImport(ProjDLL, EntryPoint="proj_context_create", CharSet=CharSet.Ansi, CallingConvention=CallingConvention.Cdecl)>]
 extern PjContextPtr proj_context_create();
@@ -114,7 +190,13 @@ extern PjContextPtr proj_context_destroy(PjContextPtr ctx);
 extern PjPtr proj_create(PjContextPtr ctx, string definition);
 
 // PJ  *proj_create_argv (PJ_CONTEXT *ctx, int argc, char **argv);
+[<DllImport(ProjDLL, EntryPoint="proj_create", CharSet=CharSet.Ansi, CallingConvention=CallingConvention.Cdecl)>]
+extern PjPtr proj_create_argv(PjContextPtr ctx, int argc, string [] argv);
+
+
 // PJ  *proj_create_crs_to_crs(PJ_CONTEXT *ctx, const char *srid_from, const char *srid_to, PJ_AREA *area);
+[<DllImport(ProjDLL, EntryPoint="proj_create", CharSet=CharSet.Ansi, CallingConvention=CallingConvention.Cdecl)>]
+extern PjPtr proj_create_crs_to_crs(PjContextPtr ctx, string srid_from, string srid_to, PjAreaPtr area);
 
 // PJ  *proj_destroy (PJ *P);
 [<DllImport(ProjDLL, EntryPoint="proj_destroy", CharSet=CharSet.Ansi, CallingConvention=CallingConvention.Cdecl)>]
@@ -134,6 +216,10 @@ extern int proj_angular_input(PjPtr p, PjDirection dir);
 extern int proj_angular_output(PjPtr p, PjDirection dir);
 
 
+/// Initializers
+// PJ_COORD proj_coord (double x, double y, double z, double t);
+
+
 /// Set or read error level
 
 // int  proj_context_errno (PJ_CONTEXT *ctx);
@@ -148,7 +234,6 @@ extern int proj_errno(PjPtr ctx);
 [<DllImport(ProjDLL, EntryPoint="proj_errno_set", CharSet=CharSet.Ansi, CallingConvention=CallingConvention.Cdecl)>]
 extern int proj_errno_set(PjPtr ctx, int err);
 
-
 // int  proj_errno_reset (const PJ *P);
 [<DllImport(ProjDLL, EntryPoint="proj_errno_reset", CharSet=CharSet.Ansi, CallingConvention=CallingConvention.Cdecl)>]
 extern int proj_errno_reset(PjPtr ctx);
@@ -157,12 +242,28 @@ extern int proj_errno_reset(PjPtr ctx);
 [<DllImport(ProjDLL, EntryPoint="proj_errno_restore", CharSet=CharSet.Ansi, CallingConvention=CallingConvention.Cdecl)>]
 extern int proj_errno_restore(PjPtr ctx, int err);
 
+
+/// Info functions - get information about various PROJ.4 entities 
+
 // PJ_INFO proj_info(void);
 [<DllImport(ProjDLL, EntryPoint="proj_info", CharSet=CharSet.Ansi, CallingConvention=CallingConvention.Cdecl)>]
 extern PjInfo proj_info();
 
+// PJ_PROJ_INFO proj_pj_info(PJ *P);
+[<DllImport(ProjDLL, EntryPoint="proj_pj_info", CharSet=CharSet.Ansi, CallingConvention=CallingConvention.Cdecl)>]
+extern PjProjInfo proj_pj_info(PjPtr p);
+
+// PJ_GRID_INFO proj_grid_info(const char *gridname);
+[<DllImport(ProjDLL, EntryPoint="proj_grid_info", CharSet=CharSet.Ansi, CallingConvention=CallingConvention.Cdecl)>]
+extern PjGridInfo proj_grid_info(string gridname);
 
 
+// PJ_INIT_INFO proj_init_info(const char *initname);
+[<DllImport(ProjDLL, EntryPoint="proj_init_info", CharSet=CharSet.Ansi, CallingConvention=CallingConvention.Cdecl)>]
+extern PjInitInfo proj_init_info(string initname);
+
+
+/// Helpers 
 
 // double proj_torad (double angle_in_degrees);
 [<DllImport(ProjDLL, EntryPoint="proj_torad", CharSet=CharSet.Ansi, CallingConvention=CallingConvention.Cdecl)>]
@@ -172,6 +273,11 @@ extern double proj_torad (double angle_in_degrees);
 // double proj_todeg (double angle_in_radians);
 [<DllImport(ProjDLL, EntryPoint="proj_todeg", CharSet=CharSet.Ansi, CallingConvention=CallingConvention.Cdecl)>]
 extern double proj_todeg (double angle_in_radians);
+
+
+/// Geographical to geocentric latitude - another of the "simple, but useful"
+
+// PJ_COORD proj_geocentric_latitude (const PJ *P, PJ_DIRECTION direction, PJ_COORD coord);
 
 // double proj_dmstor(const char *is, char **rs);
 [<DllImport(ProjDLL, EntryPoint="proj_dmstor", CharSet=CharSet.Ansi, CallingConvention=CallingConvention.Cdecl)>]
