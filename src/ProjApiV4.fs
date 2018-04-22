@@ -16,6 +16,7 @@ let RAD_TO_DEG : double = 57.295779513082321
 let DEG_TO_RAD : double = 0.017453292519943296
 
 type PjPtr = IntPtr
+type PjContextPtr = IntPtr
 
 [<Struct; StructLayout(LayoutKind.Sequential)>]
 type ProjUV = 
@@ -130,15 +131,17 @@ extern PjPtr pj_init(int argc,
 [<DllImport(ProjDLL, EntryPoint="pj_init_plus", CharSet=CharSet.Ansi, CallingConvention=CallingConvention.Cdecl)>]
 extern PjPtr pj_init_plus([<MarshalAs(UnmanagedType.LPStr)>] string pjstr);
 
+// projPJ pj_init_plus_ctx( projCtx, const char * );
+[<DllImport(ProjDLL, EntryPoint="pj_init_plus_ctx", CharSet=CharSet.Ansi, CallingConvention=CallingConvention.Cdecl)>]
+extern PjPtr pj_init_plus_ctx(PjContextPtr, 
+    [<MarshalAs(UnmanagedType.LPStr)>] string pjstr);
 
-
-
-
+// const char *pj_get_release(void);
 [<DllImport(ProjDLL, EntryPoint="pj_get_release", CharSet=CharSet.Ansi, CallingConvention=CallingConvention.Cdecl)>]
 extern IntPtr pj_get_release();
 
 
-
+// int pj_run_selftests (int verbosity);
 [<DllImport(ProjDLL, EntryPoint="pj_run_selftests", CharSet=CharSet.Ansi, CallingConvention=CallingConvention.Cdecl)>]
 extern int pj_run_selftests(int verbosity);
 

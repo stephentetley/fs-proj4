@@ -57,7 +57,7 @@ type PjUVWT =
 
 // typedef struct { double lam, phi,  z, t; }  PJ_LPZT;
 [<Struct; StructLayout(LayoutKind.Sequential)>]
-type PjULPZT = 
+type PjLPZT = 
     val Lam4 : double
     val Phi4 : double
     val Z4 : double
@@ -78,7 +78,11 @@ type PjENU =
     val U3 : double
 
 //typedef struct { double s, a1, a2; }        PJ_GEOD; /* Geodesic length, fwd azi, rev azi */
-
+[<Struct; StructLayout(LayoutKind.Sequential)>]
+type PjGEOD = 
+    val S3 : double
+    val A13 : double
+    val A23 : double
 
 [<Struct; StructLayout(LayoutKind.Sequential)>]
 type PjUV = 
@@ -99,18 +103,20 @@ type PjLP =
     val Phi2 : double
 
 [<Struct; StructLayout(LayoutKind.Sequential)>]
-type PjUVZ = 
-    new (u, v, z) = { U3 = u; V3 = v; Z3 = z }
-    val U3 : double
-    val V3 : double
-    val Z3 : double
-
-[<Struct; StructLayout(LayoutKind.Sequential)>]
 type PjXYZ = 
     new (x, y, z) = { X3 = x; Y3 = y; Z3 = z }
     val X3 : double
     val Y3 : double
     val Z3 : double
+
+
+[<Struct; StructLayout(LayoutKind.Sequential)>]
+type PjUVW = 
+    new (u, v, w) = { U3 = u; V3 = v; W3 = w }
+    val U3 : double
+    val V3 : double
+    val W3 : double
+
 
 [<Struct; StructLayout(LayoutKind.Sequential)>]
 type PjLPZ =
@@ -118,6 +124,34 @@ type PjLPZ =
     val Lam3 : double
     val Phi3 : double
     val Z3 : double
+
+type PjCoord =
+    [<FieldOffset(0)>]
+    val D4 : double[]
+    [<FieldOffset(0)>]
+    val XYZT : PjXYZT
+    [<FieldOffset(0)>]
+    val UVWT : PjUVWT
+    [<FieldOffset(0)>]
+    val LPZT : PjLPZT
+    [<FieldOffset(0)>]
+    val GEOD : PjGEOD
+    [<FieldOffset(0)>]
+    val OPK : PjOPK
+    [<FieldOffset(0)>]
+    val ENU : PjENU
+    [<FieldOffset(0)>]
+    val XYZ : PjXYZ
+    [<FieldOffset(0)>]
+    val UVW : PjUVW
+    [<FieldOffset(0)>]
+    val LPZ : PjLPZ
+    [<FieldOffset(0)>]
+    val XY : PjXY
+    [<FieldOffset(0)>]
+    val UV : PjUV
+    [<FieldOffset(0)>]
+    val LP : PjLP
 
 
 [<Struct; StructLayout(LayoutKind.Sequential)>]
@@ -176,6 +210,8 @@ type PjInitInfo =
     val Origin : string
     [<MarshalAs(UnmanagedType.ByValTStr, SizeConst = 16)>]
     val LastUpdate : string
+
+
 // PJ_CONTEXT *proj_context_create (void);
 [<DllImport(ProjDLL, EntryPoint="proj_context_create", CharSet=CharSet.Ansi, CallingConvention=CallingConvention.Cdecl)>]
 extern PjContextPtr proj_context_create();
@@ -218,6 +254,35 @@ extern int proj_angular_output(PjPtr p, PjDirection dir);
 
 /// Initializers
 // PJ_COORD proj_coord (double x, double y, double z, double t);
+[<DllImport(ProjDLL, EntryPoint="proj_coord", CharSet=CharSet.Ansi, CallingConvention=CallingConvention.Cdecl)>]
+extern PjCoord proj_coord(double x, double y, double z, double t);
+
+
+// Measure internal consistency - in forward or inverse direction
+// double proj_roundtrip (PJ *P, PJ_DIRECTION direction, int n, PJ_COORD *coord);
+
+
+// Geodesic distance between two points with angular 2D coordinates
+// double proj_lp_dist (const PJ *P, PJ_COORD a, PJ_COORD b);
+[<DllImport(ProjDLL, EntryPoint="proj_lp_dist", CharSet=CharSet.Ansi, CallingConvention=CallingConvention.Cdecl)>]
+extern double proj_lp_dist (PjPtr p, PjCoord a, PjCoord b);
+
+
+// The geodesic distance AND the vertical offset 
+// double proj_lpz_dist (const PJ *P, PJ_COORD a, PJ_COORD b);
+[<DllImport(ProjDLL, EntryPoint="proj_lpz_dist", CharSet=CharSet.Ansi, CallingConvention=CallingConvention.Cdecl)>]
+extern double proj_lpz_dist (PjPtr p, PjCoord a, PjCoord b);
+
+// Euclidean distance between two points with linear 2D coordinates
+// double proj_xy_dist (PJ_COORD a, PJ_COORD b);
+[<DllImport(ProjDLL, EntryPoint="proj_xy_dist", CharSet=CharSet.Ansi, CallingConvention=CallingConvention.Cdecl)>]
+extern double proj_xy_dist (PjCoord a, PjCoord b);
+
+
+// Euclidean distance between two points with linear 3D coordinates
+// double proj_xyz_dist (PJ_COORD a, PJ_COORD b);
+[<DllImport(ProjDLL, EntryPoint="proj_xyz_dist", CharSet=CharSet.Ansi, CallingConvention=CallingConvention.Cdecl)>]
+extern double proj_xyz_dist (PjCoord a, PjCoord b);
 
 
 /// Set or read error level
