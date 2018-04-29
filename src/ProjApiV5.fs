@@ -264,7 +264,7 @@ extern PjCoord proj_trans (PjPtr p, PjDirection direction, PjCoord coord);
 
 //int proj_trans_array (PJ *P, PJ_DIRECTION direction, size_t n, PJ_COORD *coord);
 [<DllImport(ProjDLL, EntryPoint="proj_trans_array", CharSet=CharSet.Ansi, CallingConvention=CallingConvention.Cdecl)>]
-extern int  proj_trans_array (PjPtr p, PjDirection direction, PjCoordPtr coord);
+extern int  proj_trans_array (PjPtr p, PjDirection direction, int n, PjCoordPtr coord);
 
 //size_t proj_trans_generic (
 //    PJ *P,
