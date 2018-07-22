@@ -1,10 +1,16 @@
-﻿open System
+﻿// Copyright (c) Stephen Tetley 2018
+// License: BSD 3 Clause
+
+open System
 open System.Runtime.InteropServices
 open Microsoft.FSharp.NativeInterop
 
-#load @"ProjApiV5.fs"
-open ProjApiV5
 open System.Text
+
+
+#load @"SL/Proj4/ApiV5.fs"
+open SL.Proj4.ApiV5
+
 
 
 let Test_proj_context_create () : bool = 

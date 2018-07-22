@@ -1,15 +1,15 @@
 ﻿// Acknowledgement: Largely derived from Eric G. Miller's C# code.
 
-module ProjApiV4
+module SL.Alt.ApiV4
 
 open System
 open System.Runtime.InteropServices
 open Microsoft.FSharp.NativeInterop
 
 
-// Target 4.9.3
+// Target is 4.9.3
 [<Literal>]
-let ProjDLL = __SOURCE_DIRECTORY__ +  @"\..\lib\lib.4.9.3_x64\proj.dll"
+let ProjDLL = __SOURCE_DIRECTORY__ +  @"\..\..\..\lib\lib.4.9.3_x64\proj.dll"
 
 
 let RAD_TO_DEG : double = 57.295779513082321
@@ -183,7 +183,7 @@ extern IntPtr pj_strerrno(int);
 
 // int *pj_get_errno_ref(void);
 [<DllImport(ProjDLL, EntryPoint="pj_get_errno_ref", CharSet=CharSet.Ansi, CallingConvention=CallingConvention.Cdecl)>]
-extern IntPtr pj_get_errno_ref(int);
+extern IntPtr pj_get_errno_ref();
 
 // const char *pj_get_release(void);
 [<DllImport(ProjDLL, EntryPoint="pj_get_release", CharSet=CharSet.Ansi, CallingConvention=CallingConvention.Cdecl)>]

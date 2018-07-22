@@ -1,4 +1,8 @@
-﻿module ProjApiV5
+﻿// Copyright (c) Stephen Tetley 2018
+// License: BSD 3 Clause
+
+
+module SL.Proj4.ApiV5
 
 open System
 open System.Runtime.InteropServices
@@ -7,9 +11,9 @@ open System.Text
 
 // The API is now defined in <proj.h>
 
-// Target 5.0.1
+// Target is 5.0.1
 [<Literal>]
-let ProjDLL = __SOURCE_DIRECTORY__ +  @"\..\lib\lib.5.0.1_x64\proj.dll"
+let ProjDLL = __SOURCE_DIRECTORY__ +  @"\..\..\..\lib\lib.5.0.1_x64\proj.dll"
 
 
 [<Struct; StructLayout(LayoutKind.Sequential)>]
