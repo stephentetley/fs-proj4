@@ -136,8 +136,15 @@ type PjLPZ =
     val Z3 : double
 
 /// PjCoord is probably simpler as and IntPtr with marshalling.
-type PjCoord = IntPtr
 
+/// Add marshalling to get XYZT etc.
+[<Struct; StructLayout(LayoutKind.Sequential)>]
+type PjCoord = 
+    new (i,j,k,l) = { D1 = i; D2 = j; D3 = k; D4 = l }
+    val mutable D1 : double
+    val mutable D2 : double
+    val mutable D3 : double
+    val mutable D4 : double
 
 //type PjCoord =
 //    [<FieldOffset(0)>]
