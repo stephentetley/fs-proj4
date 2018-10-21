@@ -11,11 +11,6 @@ open System.Text
 #load "..\src\FsProj4\RawFFI.fs"
 open FsProj4.RawFFI
 
-let inline degreeToRadian (d : double) : double = 
-    1.0 * (Math.PI/180.0) *  d
-        
-let inline radianToDegree (r : double) : double = 
-    1.0 * (180.0/Math.PI) *  r
 
 let demo01 () : bool = 
     try 
@@ -33,7 +28,7 @@ let demo01 () : bool =
             printfn "proj (%A)" pj
 
             /// Lands end: -5.716117 50.06861
-            let mutable aC : PjCoord = proj_coord(degreeToRadian -5.716117, degreeToRadian 50.06861, 0.0, 0.0)
+            let mutable aC : PjCoord = proj_coord(proj_torad -5.716117, proj_torad 50.06861, 0.0, 0.0)
             let mutable bC : PjCoord = proj_coord(0.0, 0.0, 0.0, 0.0)
             printfn "A: x=%f, y=%f"  aC.D1  aC.D2
             
@@ -76,7 +71,7 @@ let demo02 () : bool =
             /// Assign a
             bC <- proj_trans(pj, PjDirection.PjInv, aC)
 
-            printfn "B: x=%f, y=%f"  (radianToDegree bC.D1)  (radianToDegree bC.D2)
+            printfn "B: x=%f, y=%f"  (proj_todeg bC.D1)  (proj_todeg bC.D2)
 
 
             printfn "Cleanup"

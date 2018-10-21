@@ -74,7 +74,8 @@
   <Import Project="$(FSharpTargetsPath)" />
   <ItemGroup>
     <Compile Include="AssemblyInfo.fs" />
-    <Compile Include="FsProj4/RawFFI.fs" />
+    <Compile Include="FsProj4\RawFFI.fs" />
+    <Compile Include="FsProj4\Proj4.fs" />
     <Content Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

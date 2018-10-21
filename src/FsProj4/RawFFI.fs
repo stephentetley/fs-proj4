@@ -434,3 +434,4 @@ extern double proj_dmstor(string is,
 // char*  proj_rtodms(char *s, double r, int pos, int neg);
 [<DllImport(ProjDLL, EntryPoint="proj_rtodms", CharSet=CharSet.Ansi, CallingConvention=CallingConvention.Cdecl)>]
 extern IntPtr proj_rtodms(StringBuilder s, double r, char pos, char neg);
+

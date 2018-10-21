@@ -9,15 +9,28 @@ open System.Text
 
 
 #load "..\src\FsProj4\RawFFI.fs"
+#load "..\src\FsProj4\Proj4.fs"
 open FsProj4.RawFFI
+open FsProj4.Proj4
+
+let demo01 () = 
+    use ctx : ProjCtx = new ProjCtx ()
+    use pj : Pj = projCreateCrsToCrs ctx "epsg:25832" "epsg:25833"
+    if pj.Invalid then 
+        printfn "pj init falied"
+    else 
+        printfn "okay1" 
+    if ctx.Invalid then 
+        printfn "ctx init falied"
+    else printfn "okay2" 
 
 
-/// from the gie.c test suite
-
-let demo01 () : bool = 
+let demo02 () : bool = 
     try 
         //
         let ctx : PjContextPtr = proj_context_create ();
+
+
         if ctx = IntPtr.Zero then 
             failwith "proj_context_create"
         else 
