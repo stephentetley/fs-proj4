@@ -1,0 +1,21 @@
+Making Proj4 on Windows
+
+Download an unpack the archive
+
+Instructions are in the README, section "### Building on Windows with NMAKE".
+
+Note be sure to edit `PROJ\nmake.opt` first, set INSTDIR to something like: 
+
+INSTDIR=e:\coding\libs\proj-5.2.0_bin
+
+
+Build with the Visual Studio shell ``x64 Native Tools Command Prompt for VS 2017``, see rEADME for commands.
+
+Edit the environment variable PROJ_LIB in Windows Settings.
+
+Download datum gridfiles and put in LIB/share directory.
+Especially you must have `conus` from proj-datumgrid-XX.zip and proj-datumgrid-europe-XX
+
+Having proj-datumgrid-north-america-XX is proabably wise when working with examples.
+
+
