@@ -135,33 +135,37 @@ type PjLPZ =
     val Phi3 : double
     val Z3 : double
 
-type PjCoord =
-    [<FieldOffset(0)>]
-    val D4 : double[]
-    [<FieldOffset(0)>]
-    val XYZT : PjXYZT
-    [<FieldOffset(0)>]
-    val UVWT : PjUVWT
-    [<FieldOffset(0)>]
-    val LPZT : PjLPZT
-    [<FieldOffset(0)>]
-    val GEOD : PjGEOD
-    [<FieldOffset(0)>]
-    val OPK : PjOPK
-    [<FieldOffset(0)>]
-    val ENU : PjENU
-    [<FieldOffset(0)>]
-    val XYZ : PjXYZ
-    [<FieldOffset(0)>]
-    val UVW : PjUVW
-    [<FieldOffset(0)>]
-    val LPZ : PjLPZ
-    [<FieldOffset(0)>]
-    val XY : PjXY
-    [<FieldOffset(0)>]
-    val UV : PjUV
-    [<FieldOffset(0)>]
-    val LP : PjLP
+/// PjCoord is probably simpler as and IntPtr with marshalling.
+type PjCoord = IntPtr
+
+
+//type PjCoord =
+//    [<FieldOffset(0)>]
+//    val D4 : double[]
+//    [<FieldOffset(0)>]
+//    val XYZT : PjXYZT
+//    [<FieldOffset(0)>]
+//    val UVWT : PjUVWT
+//    [<FieldOffset(0)>]
+//    val LPZT : PjLPZT
+//    [<FieldOffset(0)>]
+//    val GEOD : PjGEOD
+//    [<FieldOffset(0)>]
+//    val OPK : PjOPK
+//    [<FieldOffset(0)>]
+//    val ENU : PjENU
+//    [<FieldOffset(0)>]
+//    val XYZ : PjXYZ
+//    [<FieldOffset(0)>]
+//    val UVW : PjUVW
+//    [<FieldOffset(0)>]
+//    val LPZ : PjLPZ
+//    [<FieldOffset(0)>]
+//    val XY : PjXY
+//    [<FieldOffset(0)>]
+//    val UV : PjUV
+//    [<FieldOffset(0)>]
+//    val LP : PjLP
 
 
 [<Struct; StructLayout(LayoutKind.Sequential)>]
@@ -262,9 +266,12 @@ extern int proj_angular_input(PjPtr p, PjDirection dir);
 [<DllImport(ProjDLL, EntryPoint="proj_angular_output", CharSet=CharSet.Ansi, CallingConvention=CallingConvention.Cdecl)>]
 extern int proj_angular_output(PjPtr p, PjDirection dir);
 
+
+// Note third argument is PJ_COORD coord, not PJ_COORD* coord...
+
 //PJ_COORD proj_trans (PJ *P, PJ_DIRECTION direction, PJ_COORD coord);
 [<DllImport(ProjDLL, EntryPoint="proj_trans", CharSet=CharSet.Ansi, CallingConvention=CallingConvention.Cdecl)>]
-extern PjCoord proj_trans (PjPtr p, PjDirection direction, PjCoord coord);
+extern PjCoord proj_trans (PjPtr p, PjDirection direction, PjCoord coord); 
 
 //int proj_trans_array (PJ *P, PJ_DIRECTION direction, size_t n, PJ_COORD *coord);
 [<DllImport(ProjDLL, EntryPoint="proj_trans_array", CharSet=CharSet.Ansi, CallingConvention=CallingConvention.Cdecl)>]

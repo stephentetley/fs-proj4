@@ -28,6 +28,33 @@ let demo01 () : bool =
             failwith "proj_create_crs_to_crs"
         else    
             printfn "proj (%A)" pj
+            let aPtr : PjCoord = proj_coord(0.0, 0.0, 0.0, 0.0)
+            if aPtr = IntPtr.Zero then
+                failwith "proj_coord"
+            else 
+                printfn "aPtr (%A)" aPtr
+            /// Assign a
+            let ds : double [] = [|700000.0; 6000000.0|]
+            Marshal.Copy(ds, 0, aPtr, 2)
+            printfn "Copied"
+
+            let temp : double [] = [|0.0; 0.0|]
+            Marshal.Copy(aPtr, temp, 0, 2)
+            printfn "temp {%f, %f}" temp.[0] temp.[1]
+
+            
+            let bPtr : PjCoord = proj_trans(pj, 1, aPtr);
+            if bPtr = IntPtr.Zero then
+                failwith "proj_trans"
+
+            else 
+                printfn "bPtr (%A)" bPtr
+
+            //Marshal.Copy(bPtr, ds, 0, 2)
+
+            //printfn "ds {%f, %f}" ds.[0] ds.[1]
+
+            printfn "Cleanup"
             proj_destroy(pj) |> ignore
             proj_context_destroy(ctx) |> ignore
             true         
