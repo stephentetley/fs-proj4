@@ -1,24 +1,130 @@
-cs2cs +init=epsg:4326 +to +init=epsg:27700
+# Notes Proj4 
 
-52.65757031 1.717921583
+**ALWAYS WORK WITH CYGWIN AT THE COMMAND LINE**
+
+Test proj4 is working (Manual 5.2.0, Section 5.1 Quick Start):
+
+echo 55.2 12.2 | proj +proj=merc +lat_ts=56.5 +ellps=GRS80
+
+Powershell>
+> 3399483.80      0.00
+> 751335.19       0.00
+
+Cygwin>
+3399483.80      752085.60
+
+cf: 3399483.80 752085.60 (Something is wrong with Powershell...)
+
+## Test NAD shifting
+
+echo -117 30 | cs2cs +proj=latlong +datum=NAD27 +to +proj=latlong +datum=NAD83
+
+Initially we got:
+Cygwin> 117dW   30dN 0.000
+
+cf. 117d0'2.901"W   30d0'0.407"N 0.000 
+
+This was because we didn't have the datumgrid data sets installed.
+
+Cygwin> 117d0'2.901"W   30d0'0.407"N 0.000
 
 
-// DMS
-echo 1d43'4.536"E    52d39'27.239"N | cs2cs +init=epsg:4326 +to +init=epsg:27700
+## Back to the Manual
 
-// decimal degrees
-echo 1.717921583    52.65757031 | cs2cs +init=epsg:4326 +to +init=epsg:27700
+From Manual:
+echo 3399483.80 752085.60 | cs2cs +proj=merc +lat_ts=56.5 +ellps=GRS80 +to +proj=utm +zone=32
 
-// Reverse
-echo 651539 313138 | cs2cs +init=epsg:27700 +to +init=epsg:4326
+Cygwin> 6103992.36      1924052.47 0.00
+
+cf. 6103992.36 1924052.47 0.00
+
+From Manual:
+echo 56 12 | cs2cs +init=epsg:4326 +to +init=epsg:25832
+
+Cygwin> 6231950.54      1920310.71 0.00
+
+cf. 231950.54 1920310.71 0.00 (Note - manual may have a typo?)
 
 
+Manual: 
+cs2cs +proj=latlong +datum=WGS84 +to +proj=latlong +datum=WGS84 +pm=madrid
 
-+proj=aea +lat_0=0 +lon_0=-120 +lat_1=34 +lat_2=40.5 +y_0=-4000000
+Cygwin> 3d41'16.58"E    0dN 0.000
 
-    let mutable x : double[] = [| -119.0; -120.0; -121.0 |] |> Array.map (fun v -> v * DEG_TO_RAD)
-    let mutable y : double[] = [| 38.0; 39.0; 40.0 |]       |> Array.map (fun v -> v * DEG_TO_RAD)
-	
+cf. 3d41'16.48"E 0dN 0.000
 
-int pj_transform( projPJ src, projPJ dst, long point_count, int point_offset,
-                  double *x, double *y, double *z );
+## Manual cs2cs paradigm
+
+echo 20 35 | cs2cs +proj=latlong +ellps=GRS80 +towgs84=-199.87,74.79,246.62 +to +proj=latlong +datum=WGS84
+
+Cygwin> 20d0'5.467"E    35d0'9.575"N 8.567
+
+cf. 20d0'5.467"E 35d0'9.575"N 8.570
+
+
+echo 4 55 | cs2cs +proj=latlong +ellps=WGS72 +towgs84=0,0,4.5,0,0,0.554,0.219 +to +proj=latlong +datum=WGS84
+
+Cygwin> 4d0'0.554"E     55d0'0.09"N 3.218
+
+cf. 4d0'0.554"E 55d0'0.09"N 3.223
+
+
+## Manual Version 5.0.0
+
+echo -70 0 | proj +proj=merc +lon_0=110
+
+Cygwin> -20037508.34    0.00
+
+cf. -20037508.34 0.00
+
+echo 290 0 | proj +proj=merc +lon_0=110
+
+Cygwin> -20037508.34    0.00
+
+cf. -20037508.34 0.00
+
+## Me:
+
+echo 50 -6 | cs2cs +proj=longlat +datum=WGS84 +no_defs 
+
+Cygwin> 50dE    6dS 0.000
+
+echo -6 50 | cs2cs +proj=longlat +datum=WGS84 +no_defs 
+
+Cgwin> 6dW     50dN 0.000
+
+So input is Lon Lat for WGS84 (this should be obvious but I may have got it wrong at other times). 
+
+
+echo -5.716117 50.06861 | cs2cs +proj=longlat +datum=WGS84 +no_defs 
+
+Cygwin> 5d42'58.021"W   50d4'6.996"N 0.000
+
+
+Finally...
+
+Lands End:
+
+echo -5.716117 50.06861 | cs2cs +init=epsg:4326 +to +init=epsg:27700
+
+Cygwin> 134177.02       25338.88 -50.67
+
+Cf. 134177 25339
+
+Reverse
+
+echo 134177.02  25338.88 | cs2cs +init=epsg:27700 +to +init=epsg:4326
+
+Cygwin> 5d42'58.021"W   50d4'6.996"N 50.668
+
+Cf. d 42' 58.02" W, 50d 4' 7" N
+
+## Reference
+
+
+Lands End
+DMS 50d 4' 7" N, 5d 42' 58.02" W
+Decimal 50.06861, -5.716117 [Lat,Lon] (decimal degrees)
+
+OS Grid Reference: SW3417725338 (all-numeric format: 134177 25339 [Easting-Northing])
+
