@@ -8,7 +8,7 @@ open Microsoft.FSharp.NativeInterop
 open System.Text
 
 
-#load @"SL/Proj4/ApiV5.fs"
+#load "..\src\SL\Proj4\ApiV5.fs"
 open SL.Proj4.ApiV5
 
 

@@ -5,7 +5,7 @@ open System
 open System.Runtime.InteropServices
 open Microsoft.FSharp.NativeInterop
 
-#load @"SL/Alt/ApiV4.fs"
+#load "..\src\SL\Alt\ApiV4.fs"
 open SL.Alt.ApiV4
 
 
