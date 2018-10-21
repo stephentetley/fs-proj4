@@ -8,8 +8,8 @@ open Microsoft.FSharp.NativeInterop
 open System.Text
 
 
-#load "..\src\SL\Proj4\ApiV5.fs"
-open SL.Proj4.ApiV5
+#load "..\src\FsProj4\RawFFI.fs"
+open FsProj4.RawFFI
 
 
 

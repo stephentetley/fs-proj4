@@ -42,6 +42,7 @@
   <Import Project="$(FSharpTargetsPath)" />
   <ItemGroup>
     <Compile Include="AssemblyInfo.fs" />
+    <Compile Include="RawFFIV4.fs" />
     <None Include="TestV4.fsx" />
     <None Include="TestV5.fsx" />
     <Content Include="packages.config" />

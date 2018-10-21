@@ -1,6 +1,6 @@
 ﻿// Acknowledgement: Largely derived from Eric G. Miller's C# code.
 
-module SL.Alt.ApiV4
+module RawFFIV4
 
 open System
 open System.Runtime.InteropServices
@@ -9,7 +9,7 @@ open Microsoft.FSharp.NativeInterop
 
 // Target is 4.9.3
 [<Literal>]
-let ProjDLL = __SOURCE_DIRECTORY__ +  @"\..\..\..\lib\lib.4.9.3_x64\proj.dll"
+let ProjDLL = __SOURCE_DIRECTORY__ +  @"\..\lib\lib.4.9.3_x64\proj.dll"
 
 
 let RAD_TO_DEG : double = 57.295779513082321

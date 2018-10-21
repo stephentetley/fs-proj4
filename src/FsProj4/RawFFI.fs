@@ -2,7 +2,7 @@
 // License: BSD 3 Clause
 
 
-module SL.Proj4.ApiV5
+module FsProj4.RawFFI
 
 open System
 open System.Runtime.InteropServices
@@ -13,7 +13,7 @@ open System.Text
 
 // Target is 5.2.0
 [<Literal>]
-let ProjDLL = __SOURCE_DIRECTORY__ +  @"\..\..\..\lib\lib.5.2.0_x64\proj.dll"
+let ProjDLL = __SOURCE_DIRECTORY__ +  @"\..\..\lib\lib.5.2.0_x64\proj.dll"
 
 
 [<Struct; StructLayout(LayoutKind.Sequential)>]
