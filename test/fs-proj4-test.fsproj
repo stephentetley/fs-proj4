@@ -45,6 +45,8 @@
     <Compile Include="RawFFIV4.fs" />
     <None Include="TestV4.fsx" />
     <None Include="TestV5.fsx" />
+    <None Include="Demo01.fsx" />
+    <None Include="Demo02.fsx" />
     <Content Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

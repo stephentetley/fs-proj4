@@ -240,7 +240,7 @@ extern PjPtr proj_create(PjContextPtr ctx, string definition);
 extern PjPtr proj_create_argv(PjContextPtr ctx, int argc, string [] argv);
 
 // PJ  *proj_create_crs_to_crs(PJ_CONTEXT *ctx, const char *srid_from, const char *srid_to, PJ_AREA *area);
-[<DllImport(ProjDLL, EntryPoint="proj_create", CharSet=CharSet.Ansi, CallingConvention=CallingConvention.Cdecl)>]
+[<DllImport(ProjDLL, EntryPoint="proj_create_crs_to_crs", CharSet=CharSet.Ansi, CallingConvention=CallingConvention.Cdecl)>]
 extern PjPtr proj_create_crs_to_crs(PjContextPtr ctx, string srid_from, string srid_to, PjAreaPtr area);
 
 // PJ  *proj_destroy (PJ *P);
