@@ -15,14 +15,16 @@ open FsProj4.Proj4
 
 let demo01 () = 
     use ctx : ProjCtx = new ProjCtx ()
-    use pj : Pj = projCreateCrsToCrs ctx "epsg:25832" "epsg:25833"
+    use pj : Pj = projCreateCrsToCrs ctx "epsg:4326" "epsg:27700"
     if pj.Invalid then 
         printfn "pj init falied"
     else 
         printfn "okay1" 
     if ctx.Invalid then 
         printfn "ctx init falied"
-    else printfn "okay2" 
+    else
+        let ans = projTrans pj PjDirection.PjFwd { X1 = degToRad -5.716117; Y1 = degToRad 50.06861; Z1 = 0.0; T1 = 0.0 }
+        printfn "Coord { easting=%f; northing=%f }" ans.X1 ans.Y1
 
 
 let demo02 () : bool = 

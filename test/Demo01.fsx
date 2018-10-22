@@ -35,7 +35,7 @@ let demo01 () : bool =
             /// Assign a
             bC <- proj_trans(pj, PjDirection.PjFwd, aC)
 
-            printfn "B: x=%f, y=%f"  bC.D1  bC.D2
+            printfn "B: easting=%f, northing=%f"  bC.D1  bC.D2
 
 
             printfn "Cleanup"

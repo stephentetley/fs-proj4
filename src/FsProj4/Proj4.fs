@@ -13,7 +13,7 @@ open FsProj4.RawFFI
 
 let degToRad (deg:double) : double = proj_torad deg
 
-let radTodeg (rad:double) : double = proj_todeg rad
+let radToDeg (rad:double) : double = proj_todeg rad
 
 type ProjCtx =
     val internal Ptr : PjContextPtr
@@ -43,5 +43,26 @@ type Pj =
             proj_destroy(x.Ptr) |> ignore
 
 let projCreateCrsToCrs (ctx:ProjCtx) (sridFrom:string) (sridTo:string) : Pj = 
-    let ptr : PjPtr = proj_create_crs_to_crs(ctx.Ptr, sridFrom, sridFrom, IntPtr.Zero) 
+    let ptr : PjPtr = proj_create_crs_to_crs(ctx.Ptr, sridFrom, sridTo, IntPtr.Zero) 
     new Pj (ptr)
+
+type Coord = 
+    { X1: double
+      Y1: double
+      Z1: double
+      T1: Double }
+    member x.ToPjCoord () : PjCoord = proj_coord(x.X1, x.Y1, x.Z1, x.T1)
+
+    static member FromPjCoord (x:PjCoord) : Coord = 
+        { X1 = x.D1; Y1 = x.D2; Z1 = x.D3; T1 = x.D4 }
+
+    
+
+
+let projTrans (pj:Pj) (direction:PjDirection) (c:Coord) : Coord = 
+    let mutable pjArg:PjCoord = c.ToPjCoord()
+    let mutable pjAns:PjCoord = proj_coord(0.0, 0.0, 0.0, 0.0)
+    printfn "pjArg (%s)" (pjArg.ToString())
+    pjAns <- proj_trans(pj.Ptr, direction, pjArg)
+    printfn "pjAns (%s)" (pjAns.ToString())
+    Coord.FromPjCoord pjAns

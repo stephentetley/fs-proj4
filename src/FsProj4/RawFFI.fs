@@ -140,12 +140,16 @@ type PjLPZ =
 /// Add marshalling to get XYZT etc.
 [<Struct; StructLayout(LayoutKind.Sequential)>]
 type PjCoord = 
-    new (i,j,k,l) = { D1 = i; D2 = j; D3 = k; D4 = l }
     val mutable D1 : double
     val mutable D2 : double
     val mutable D3 : double
     val mutable D4 : double
+    
+    new (i,j,k,l) = { D1 = i; D2 = j; D3 = k; D4 = l }
 
+    override x.ToString() = 
+        sprintf "{ D1 = %f; D2 = %f; D3 = %f; D4 = %f }" x.D1 x.D2 x.D3 x.D4
+    
 //type PjCoord =
 //    [<FieldOffset(0)>]
 //    val D4 : double[]
