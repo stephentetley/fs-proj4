@@ -62,7 +62,5 @@ type Coord =
 let projTrans (pj:Pj) (direction:PjDirection) (c:Coord) : Coord = 
     let mutable pjArg:PjCoord = c.ToPjCoord()
     let mutable pjAns:PjCoord = proj_coord(0.0, 0.0, 0.0, 0.0)
-    printfn "pjArg (%s)" (pjArg.ToString())
     pjAns <- proj_trans(pj.Ptr, direction, pjArg)
-    printfn "pjAns (%s)" (pjAns.ToString())
     Coord.FromPjCoord pjAns

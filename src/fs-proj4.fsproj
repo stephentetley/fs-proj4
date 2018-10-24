@@ -8,7 +8,7 @@
     <ProjectGuid>e47e5962-6582-4de4-af01-fcdf80c4627b</ProjectGuid>
     <OutputType>Library</OutputType>
     <RootNamespace>fs_proj4</RootNamespace>
-    <AssemblyName>fs_proj4</AssemblyName>
+    <AssemblyName>FsProj4</AssemblyName>
     <UseStandardResourceNames>true</UseStandardResourceNames>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <TargetFSharpCoreVersion>4.4.3.0</TargetFSharpCoreVersion>
@@ -76,6 +76,7 @@
     <Compile Include="AssemblyInfo.fs" />
     <Compile Include="FsProj4\RawFFI.fs" />
     <Compile Include="FsProj4\Proj4.fs" />
+    <Compile Include="FsProj4\TemporaryAPI.fs" />
     <Content Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
