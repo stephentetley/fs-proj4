@@ -7,11 +7,20 @@ open Microsoft.FSharp.NativeInterop
 
 open System.Text
 
+// Lands End
+// DMS 50d 4' 7" N, 5d 42' 58.02" W
+// Decimal 50.06861 (Lat), -5.716117 (Lon)  (decimal degrees)
+
+// OS Grid Reference: SW3417725338 
+// All-numeric format: 134177 (Easting) 25339 (Northing)
+
 
 #load "..\src\FsProj4\RawFFI.fs"
 #load "..\src\FsProj4\Proj4.fs"
+#load "..\src\FsProj4\TemporaryAPI.fs"
 open FsProj4.RawFFI
 open FsProj4.Proj4
+open FsProj4.TemporaryAPI
 
 let demo01 () = 
     use ctx : ProjCtx = new ProjCtx ()
@@ -27,42 +36,19 @@ let demo01 () =
         printfn "Coord { easting=%f; northing=%f }" ans.X1 ans.Y1
 
 
-let demo02 () : bool = 
+let demo02 () : unit = 
     try 
-        //
-        let ctx : PjContextPtr = proj_context_create ();
-
-
-        if ctx = IntPtr.Zero then 
-            failwith "proj_context_create"
-        else 
-            printfn "context (%A)" ctx
-
-        let pj : PjPtr = proj_create_crs_to_crs(ctx, "epsg:25832", "epsg:25833", IntPtr.Zero) 
-        if pj = IntPtr.Zero then 
-            failwith "proj_create_crs_to_crs"
-        else    
-            printfn "proj (%A)" pj
-
-            let mutable aC : PjCoord = proj_coord(0.0, 0.0, 0.0, 0.0)
-            let mutable bC : PjCoord = proj_coord(0.0, 0.0, 0.0, 0.0)
-            printfn "A: x=%f, y=%f"  aC.D1  aC.D2
-            
-            /// Assign a
-            aC.D1 <- 700000.0
-            aC.D2 <- 6000000.0
-
-            bC <- proj_trans(pj, PjDirection.PjFwd, aC)
-
-            printfn "B: x=%f, y=%f"  bC.D1  bC.D2
-
-
-            printfn "Cleanup"
-            proj_destroy(pj) |> ignore
-            proj_context_destroy(ctx) |> ignore
-            true         
-
+        let osgb = { EastingInMetres = 134177.023475; NorthingInMetres = 25338.881074 }
+        printfn "%A" <| osgb36ToWGS84 osgb        
     with
     | ex ->
-        failwithf "Error: Test_proj_create {%A}"  ex
+        failwithf "Error: {%A}"  ex
         
+
+let demo03 () : unit = 
+    try 
+        let wgs = { LatitideInDegrees = 50.06861; LongitudeInDegrees = -5.716117 }
+        printfn "%A" <| wgs84ToOSGB36 wgs        
+    with
+    | ex ->
+        failwithf "Error: {%A}"  ex
