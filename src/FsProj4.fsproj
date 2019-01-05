@@ -1,0 +1,12 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="FsProj4\RawFFI.fs" />
+    <Compile Include="FsProj4\Proj4.fs" />
+  </ItemGroup>
+
+</Project>
